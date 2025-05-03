@@ -24,7 +24,9 @@ The chip orientation in the package must comply to a face-down orientation. Exam
 
 ## Mechanical Properties
 
-Finished die thickness shall be less than 500 µm. A thickness of less than 300 µm is preferred. Thinner substrates are advantageous for imaging performance; however, minimum thickness shall be determined by mechanical integrity requirements associated with assembly and handling processes. Substrates with low doping concentrations are preferred to optimize imaging contrast. For substrates with higher doping concentrations, reduced backside thickness is required to mitigate image contrast degradation due to dopant-induced light scattering.
+Finished die thickness shall be less than 500 µm. A thickness of less than 300 µm is preferred. Thinner substrates are advantageous for imaging performance; however, minimum thickness shall be determined by mechanical integrity requirements associated with assembly and handling processes.
+
+Substrates with low doping concentrations are preferred to optimize imaging contrast. For substrates with higher doping concentrations, reduced backside thickness is required to mitigate image contrast degradation due to dopant-induced light scattering.
 
 Backside finish of the chip shall be bare silicon. No coatings are permitted. The wafer shall be background to a finish of Ra ≈ 0.2–0.5 µm or better.
 

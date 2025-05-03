@@ -4,7 +4,7 @@
 
 ## Abstract
 
-This document specifies the mechanical requirements for an assembled system to facilitate IRIS inspection.
+This document specifies best practices for facilitating IRIS inspection in finished products.
 
 ## Status
 
@@ -20,15 +20,15 @@ All dimensions are in millimeters unless otherwise specified.
 
 ## System Overview
 
-A key feature of IRIS is the ability to inspect chips *in-situ*, that is, after they have been integrated into a system. "Point of use" inspection means that the final end user is also doing the inspection. While it may not always be practical for every user to personally inspect their devices, reducing the number of handling steps between the point of inspection and the end user correspondingly minimizes the number of actors involved in the chain of trust.
+A key feature of IRIS is the ability to inspect chips *in-situ*, that is, after they have been integrated into a system. Inspections aim to be at the "point of use"; that is, performed by the end user, at the point of use. While it may not always be practical for every user to personally inspect their devices, reducing the number of handling steps between the point of inspection and the end user correspondingly minimizes the number of actors involved in the chain of trust.
 
 A system that is easy to inspect reduces the barrier between the point of inspection and the point of use. This document provides guidelines, specifications and best practices for systems looking to facilitate IRIS inspections.
 
 ## Optical Calibration & Alignment Fiducials
 
-It is recommended to incorporate alignment fiducials into the top copper layer of any PCB designated for IRIS-inspectable systems. Alignment fiducials assist the computation of rotation and scale correction terms in machine vision operations. This is essential for high-resolution comparisons of the device under test (DUT) against reference images.
+Alignment fiducials should be incorporated into the top copper layer of any PCB designated for IRIS-inspectable systems. Alignment fiducials assist the computation of rotation and scale correction terms in machine vision operations. This is essential for high-resolution comparisons of the device under test (DUT) against reference images.
 
-The fiducial shapes are also designed as auto-focus targets, allowing them to play a critical role for machines, such as [Jubiris](https://github.com/bunnie/iris-hw), that have the ability to correct for offsets in the imaging plane in three dimensions. Flatness correction is particularly important for high-power objectives, where the focus depth may be just a few microns.
+The fiducial shapes are also designed as auto-focus targets, allowing them to play a critical role for machines, such as [Jubiris](https://github.com/bunnie/iris-hw), that have the ability to correct for offsets in the imaging plane in three dimensions. Parallelism correction is particularly important for high-power objectives, where the focus depth may be just a few microns.
 
 Constructing the fiducials using the PCB copper layer leverages the relatively high consistency of modern PCB processes to create a standard ruler that is parallel to the plane of the chip. The alignment fiducials consist of three marks: two crosses, and a set of dots.
 
@@ -37,11 +37,11 @@ Constructing the fiducials using the PCB copper layer leverages the relatively h
 In addition to creating these copper patterns on the top layer of the PCB, designers should also pay attention to the following concerns:
 - A copper keep-out is required around the fiducials. This prevents traces and fill zones from intruding into the recognition area.
 - A solder mask pull back is recommended in the fiducial regions. However, this is not mandatory, as most soldermasks are virtually transparent in infrared wavelengths.
-- No copper features should be routed underneath the fiducials. FR-4 dilectrics are translucent to infrared light. Any copper feature under the fiducial should be at least as wide as the fiducial itself.
+- No copper features should be routed underneath the fiducials, as FR-4 dilectrics are translucent to infrared light. Any copper feature under the fiducial should be at least as wide as the fiducial itself.
 
-The exact distance of the fiducials from the DUT edge is flexible. Once the fiducials are recognized, the system can be programmed with the implementation-specific distance required to dead-reckon from the fiducials to the chip itself. The hard limit is the safety envelope of the imaging head's movement, which is constrained to a few centimeters, but it makes the imaging setup faster if the fiducials are closer to the chip. Thus, placement within 2mm from the edge of the DUT is a good rule of thumb.
+The exact distance of the fiducials from the DUT edge is flexible. Once the fiducials are recognized, the system can be programmed with the implementation-specific distance required to dead-reckon from the fiducials to the chip itself. The hard limit is the safety envelope of the imaging head's movement, which is constrained to a few centimeters, but imaging setup is faster if the fiducials are closer to the chip. Thus, a good rule of thumb is to place the fiducials within 2mm from the edge of the DUT.
 
-Regardless of the distance, the fiducials must remain symmetric along the diagonals of the DUT (dashed gray lines in the diagram above). Symmetry is required so that the center point of the DUT may be extracted from the fiducials.
+Regardless of the distance, the fiducials must remain symmetric along the diagonals of the DUT (dashed gray lines in the diagram above). Symmetry is required so that the center point of the DUT may be inferred from the fiducials.
 
 ### Library Primitives
 
@@ -57,7 +57,7 @@ Below is another example of fiducials, this time on a chip mounted at a 45 degre
 
 ![45-degree angle example](./images/integration-example2.png)
 
-Note that it is acceptable to place components and traces between the fiducials and the DUT. However, note that components located near the DUT may induce specular reflections that degrade the contrast of the resulting image. This glare can be mitigated by temporarily tenting the extra components with an IR-absorbent mask. Such a mask may be painted using IR-absorbent carbon black ink, or if budget allows, be constructed from an ultra-black material such as [Acktar Black](https://acktar.com/).
+Note that it is acceptable to place components and traces between the fiducials and the DUT. However, components located near the DUT may induce specular reflections that degrade the contrast of the resulting image. This glare can be mitigated by temporarily tenting the extra components with an IR-absorbent mask during imaging. Such a mask may be painted using IR-absorbent carbon black ink, or if budget allows, be constructed from an ultra-black material such as [Acktar Black](https://acktar.com/).
 
 A component keep-out is required around fiducials that is equal to the height of the nearest component. This requirement prevents shadows being cast onto the fiducials by adjacent components.
 
@@ -102,7 +102,7 @@ Above is a cross-section view of the device as prepared for imaging. Here, one c
 
 In some cases, it may be desireable to seal the chip after inspection to improve physical resistance to tampering. A low-shrinkage expoxy may be applied around the chip to accomplish this goal. The primary considerations for selecting any epoxy are:
 
-1. Reliability issues that may arise from shrinkage of the epoxy as it dries. Note that standard household epoxies may shrink by as much as 5% in volume, which can apply shear stresses to solder joints.
+1. Reliability issues that may arise from shrinkage of the epoxy as it cures. Note that standard household epoxies may shrink by as much as 5% in volume, which can apply shear stresses to solder joints.
 2. Long term reliability issues arising from mismatches in coefficient of expansion with temperature between the epoxy, silicon and circuit board.
 
 Epoxy formulations marketed for the underfill of CSP/BGA are ideal candidates, as well as epoxies marketed for the potting of electronics. These formulations have a viscosity, shrinkage and thermal expansions coefficient designed to match applications in electronics.
@@ -113,11 +113,11 @@ In addition to the use of epoxy to bond the chip to the board, applications with
 
 While tamper-resistance meausures also provide a measure of tamper-evidence, checking for tampering would require the user to disassemble the product and inspect the internal epoxy seal. Thus for applications where tamper-evidence is desired, a field-inspectable seal on the outer case is recommended.
 
-It is recommended to use a hybrid seal that features both a quick and easy check, as well as a thorough but slower check. Such a seal can be prepared by using fibrous paper that has bears the user's signature (or some other equivalently recognizeable symbol to the user). The fibrous paper is then lacquered over the primary seam on the case using a clear nail polish or equivalent adhesive.
+It is recommended to use a hybrid seal that features two paths for inspection: one path is quick and easy, and the other path is slow but thorough. Such a seal can be prepared by using a visibly fibrous paper that has bears the user's signature (or some other equivalently recognizeable symbol to the user). The fibrous paper is then lacquered over the primary seam on the case using a clear nail polish or equivalent adhesive.
 
 The seal is inspected using a hybrid of two methods:
 - An imperfect but easy inspection of the seal relying on the user's innate human ability to recognize their own inscription.
-- A robust but more complicated method which relies on comparing the individual fibers in the underlying paper. While such patterns of fiber are difficult to copy, such comparisons are time consuming. The inspection process may be accelerated by using an image processing app that runs on a less trusted device.
+- A robust but more complicated method which relies on comparing the individual fibers in the underlying paper. While such patterns of fiber are difficult to copy, such comparisons are time consuming. The inspection process may be accelerated with aid of an image processing application that runs on a less trusted device.
 
 In practice, a user would routinely perform the quick and dirty inspection using their own eyes and human judgment, and perform the more detailed but secure machine-assisted inspection only when surreptitious tampering has been suspected.
 
